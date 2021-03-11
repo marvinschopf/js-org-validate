@@ -169,7 +169,7 @@ class App extends React.Component<Props, State> {
 		});
 		providersMap.forEach((provider) => {
 			providers.push(
-				<Box key={`provider-${provider}`}>
+				<Box key={`provider-${provider.provider}`}>
 					<Text color="whiteBright" bold>
 						{provider}:{" "}
 					</Text>

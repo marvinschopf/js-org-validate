@@ -294,7 +294,7 @@ class App extends React.Component<Props, State> {
 		const cnamesDoExist = await cnamesExist();
 		if (!cnamesDoExist) {
 			this.setState;
-			this.error("The file 'cnames_active.js' does not exist.");
+			this.error("The file 'cnames_active.js' does not exist.", true);
 		}
 		try {
 			prettier.check(
@@ -307,14 +307,17 @@ class App extends React.Component<Props, State> {
 				}
 			);
 		} catch (e) {
-			this.error("File 'cnames_active.js' has an invalid syntax.");
+			this.error("File 'cnames_active.js' has an invalid syntax.", true);
 		}
 		this.setStatus("Parsing...");
 		let cnames: Cname[] = [];
 		try {
 			cnames = await getCNAMEs(await getCNAMEsFile());
 		} catch (e) {
-			this.error("An error occured while parsing 'cnames_active.js'.");
+			this.error(
+				"An error occured while parsing 'cnames_active.js'.",
+				true
+			);
 		}
 		let failSorting: boolean = false;
 		const sortedItems: string[] = (await getKeyProperties(cnames)).sort();
@@ -354,9 +357,16 @@ class App extends React.Component<Props, State> {
 		if (failSorting) this.end(1);
 		await asyncForEach(cnames, async (cname: Cname, index: number) => {
 			this.setStatus(`Checking '${cname.key}'...`);
+			if (!isURL(`${cname.key}.js.org`)) {
+				this.error(
+					`CNAME would not be a valid URL: '${cname.key}' => '${cname.key}.js.org'`,
+					false
+				);
+			}
 			if (!isURL(cname.target)) {
 				this.error(
-					`CNAME target is not a valid url: '${cname.key}' => '${cname.target}'`
+					`CNAME target is not a valid url: '${cname.key}' => '${cname.target}'`,
+					false
 				);
 			}
 			let providerExistent: boolean = false;

@@ -196,68 +196,94 @@ class App extends React.Component<Props, State> {
 					<Box>
 						<Text> </Text>
 					</Box>
-					<Box>
-						<Text color="magenta" bold>
-							Breakdown of services used:
-						</Text>
-					</Box>
-					{providers}
-					<Box>
-						<Text color="gray">----------------------------</Text>
-					</Box>
-					<Box>
-						<Text color="whiteBright" bold>
-							Others:{" "}
-						</Text>
-						<Text color="whiteBright">
-							{((othersCount / totalElements) * 100).toFixed(2)}%{" "}
-							<Text color="gray">({othersCount})</Text>
-						</Text>
-					</Box>
-					<Box>
-						<Text color="whiteBright" bold>
-							Total:{" "}
-						</Text>
-						<Text color="whiteBright">{totalElements}</Text>
-					</Box>
-					<Box>
-						<Text> </Text>
-					</Box>
-					<Box>
-						<Text color="magenta" bold>
-							Cloudflare statistics:
-						</Text>
-					</Box>
-					<Box>
-						<Text color="whiteBright" bold>
-							Sites using Cloudflare:{" "}
-						</Text>
-						<Text color="whiteBright">
-							{(
-								((totalElements - this.state.noCF) /
-									totalElements) *
-								100
-							).toFixed(2)}
-							%{" "}
-							<Text color="gray">
-								({totalElements - this.state.noCF})
-							</Text>
-						</Text>
-					</Box>
-					<Box>
-						<Text color="whiteBright" bold>
-							Sites not using Cloudflare:{" "}
-						</Text>
-						<Text color="whiteBright">
-							{((this.state.noCF / totalElements) * 100).toFixed(
-								2
-							)}
-							% <Text color="gray">({this.state.noCF})</Text>
-						</Text>
-					</Box>
-					<Box>
-						<Text> </Text>
-					</Box>
+					{this.state.errors.length !== 0 && (
+						<Fragment>
+							<Box>
+								<Text color="magenta" bold>
+									Breakdown of services used:
+								</Text>
+							</Box>
+							{providers}
+							<Box>
+								<Text color="gray">
+									----------------------------
+								</Text>
+							</Box>
+							<Box>
+								<Text color="whiteBright" bold>
+									Others:{" "}
+								</Text>
+								<Text color="whiteBright">
+									{(
+										(othersCount / totalElements) *
+										100
+									).toFixed(2)}
+									% <Text color="gray">({othersCount})</Text>
+								</Text>
+							</Box>
+							<Box>
+								<Text color="whiteBright" bold>
+									Total:{" "}
+								</Text>
+								<Text color="whiteBright">{totalElements}</Text>
+							</Box>
+							<Box>
+								<Text> </Text>
+							</Box>
+							<Box>
+								<Text color="magenta" bold>
+									Cloudflare statistics:
+								</Text>
+							</Box>
+							<Box>
+								<Text color="whiteBright" bold>
+									Sites using Cloudflare:{" "}
+								</Text>
+								<Text color="whiteBright">
+									{(
+										((totalElements - this.state.noCF) /
+											totalElements) *
+										100
+									).toFixed(2)}
+									%{" "}
+									<Text color="gray">
+										({totalElements - this.state.noCF})
+									</Text>
+								</Text>
+							</Box>
+							<Box>
+								<Text color="whiteBright" bold>
+									Sites not using Cloudflare:{" "}
+								</Text>
+								<Text color="whiteBright">
+									{(
+										(this.state.noCF / totalElements) *
+										100
+									).toFixed(2)}
+									%{" "}
+									<Text color="gray">
+										({this.state.noCF})
+									</Text>
+								</Text>
+							</Box>
+							<Box>
+								<Text> </Text>
+							</Box>
+						</Fragment>
+					)}
+					{this.state.errors.length >= 1 && (
+						<Fragment>
+							<Box>
+								<Text> </Text>
+							</Box>
+							<Box>
+								<Text color="red" bold>
+									Not showing statistics because errors have
+									occurred.
+								</Text>
+							</Box>
+						</Fragment>
+					)}
 					<Box>
 						<Text color="gray">
 							{withCode === 0 ? (

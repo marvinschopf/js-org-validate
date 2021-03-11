@@ -23,13 +23,13 @@ yarn global add js-org-validate
 
 Quite simply with `npx`:
 
-``bash
+```bash
 npx js-org-validate
-
 ```
 
 If you have installed it before:
 
-``bash
+```bash
 js-org-validate
+
 ```

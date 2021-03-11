@@ -110,6 +110,7 @@ type State = {
 	summary: ReactNode;
 	done: boolean;
 	providersMap: { provider: string; count: number }[];
+	noCF: number;
 };
 
 type Provider = {
@@ -130,6 +131,7 @@ class App extends React.Component<Props, State> {
 			warningCount: 0,
 			done: false,
 			providersMap: [],
+			noCF: 0,
 		};
 	}
 	error(message: string, exitAfter = true) {
@@ -208,9 +210,15 @@ class App extends React.Component<Props, State> {
 							Others:{" "}
 						</Text>
 						<Text color="whiteBright">
-							{((othersCount / totalElements) * 100).toFixed()}%{" "}
+							{((othersCount / totalElements) * 100).toFixed(2)}%{" "}
 							<Text color="gray">({othersCount})</Text>
 						</Text>
+					</Box>
+					<Box>
+						<Text color="whiteBright" bold>
+							Total:{" "}
+						</Text>
+						<Text color="whiteBright">{totalElements}</Text>
 					</Box>
 					<Box>
 						<Text color="gray">
@@ -334,6 +342,11 @@ class App extends React.Component<Props, State> {
 					}
 				}
 			);
+			if (cname.noCF && cname.noCF.includes("noCF")) {
+				this.setState({
+					noCF: this.state.noCF + 1,
+				});
+			}
 			if (!providerExistent) {
 				providersMap.push({
 					provider: identify(cname.target),

@@ -192,7 +192,7 @@ class App extends React.Component<Props, State> {
 			summary: (
 				<Fragment>
 					<Box>
-						<Text color="gray">----------------------------</Text>
+						<Text> </Text>
 					</Box>
 					<Box>
 						<Text color="magenta" bold>

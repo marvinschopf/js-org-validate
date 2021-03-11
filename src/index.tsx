@@ -498,6 +498,9 @@ class App extends React.Component<Props, State> {
 	render() {
 		return (
 			<React.Fragment>
+				<Box>
+					<Text> </Text>
+				</Box>
 				{this.state.warnings.map((warning) => {
 					return (
 						<Box key={`warning-${warning}`}>

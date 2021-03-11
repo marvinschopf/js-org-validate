@@ -3,9 +3,13 @@
 	"version": "1.0.0",
 	"main": "dist/index.js",
 	"repository": "https://github.com/marvinschopf/js-org-validate",
-	"author": "Marvin Schopf <marvin@schopf.biz>",
+	"author": {
+		"name": "Marvin Schopf",
+		"email": "marvin@schopf.biz",
+		"url": "https://www.marvinschopf.com"
+	},
 	"license": "AGPL-3.0-or-later",
-	"private": true,
+	"private": false,
 	"devDependencies": {
 		"@types/node": "14.14.33",
 		"@types/node-fetch": "2.5.8",
@@ -25,7 +29,7 @@
 	},
 	"scripts": {
 		"build": "tsc",
-		"style:fix": "prettier --write **/*.tsx **/*.ts **/*.json"
+		"style:fix": "prettier --write **/*.tsx **/*.ts **/*.json **/*.md"
 	},
 	"prettier": {
 		"useTabs": true,

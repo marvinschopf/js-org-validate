@@ -163,37 +163,55 @@ class App extends React.Component<Props, State> {
 		});
 		let providersMap: Provider[] = this.state.providersMap;
 		providersMap = this.state.providersMap.sort((a, b): number => {
-			if (a.count < b.count) return -1;
-			if (a.count > b.count) return 1;
+			if (a.count > b.count) return -1;
+			if (a.count < b.count) return 1;
 			return 0;
 		});
+		let othersCount: number = 0;
 		providersMap.forEach((provider) => {
-			providers.push(
-				<Box key={`provider-${provider.provider}`}>
-					<Text color="whiteBright" bold>
-						{provider.provider}:{" "}
-					</Text>
-					<Text color="whiteBright">
-						{(Math.round(
-							(provider.count / totalElements) * 100 +
-								Number.EPSILON
-						) *
-							100) /
-							100}
-						% <Text color="gray">({provider.count})</Text>
-					</Text>
-				</Box>
-			);
+			if (
+				provider.provider !== "Others" &&
+				provider.provider !== "Other"
+			) {
+				providers.push(
+					<Box key={`provider-${provider.provider}`}>
+						<Text color="whiteBright" bold>
+							{provider.provider}:{" "}
+						</Text>
+						<Text color="whiteBright">
+							{((provider.count / totalElements) * 100).toFixed()}
+							% <Text color="gray">({provider.count})</Text>
+						</Text>
+					</Box>
+				);
+			} else {
+				othersCount = provider.count;
+			}
 		});
 		this.setState({
 			summary: (
 				<Fragment>
+					<Box>
+						<Text color="gray">----------------------------</Text>
+					</Box>
 					<Box>
 						<Text color="magenta" bold>
 							Breakdown of services used:
 						</Text>
 					</Box>
 					{providers}
+					<Box>
+						<Text color="gray">----------------------------</Text>
+					</Box>
+					<Box>
+						<Text color="whiteBright" bold>
+							Others:{" "}
+						</Text>
+						<Text color="whiteBright">
+							{((othersCount / totalElements) * 100).toFixed()}%{" "}
+							<Text color="gray">({othersCount})</Text>
+						</Text>
+					</Box>
 					<Box>
 						<Text color="gray">
 							{withCode === 0 ? (

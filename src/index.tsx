@@ -221,6 +221,44 @@ class App extends React.Component<Props, State> {
 						<Text color="whiteBright">{totalElements}</Text>
 					</Box>
 					<Box>
+						<Text> </Text>
+					</Box>
+					<Box>
+						<Text color="magenta" bold>
+							Cloudflare statistics:
+						</Text>
+					</Box>
+					<Box>
+						<Text color="whiteBright" bold>
+							Sites using Cloudflare:{" "}
+						</Text>
+						<Text color="whiteBright">
+							{(
+								((totalElements - this.state.noCF) /
+									totalElements) *
+								100
+							).toFixed(2)}
+							%{" "}
+							<Text color="gray">
+								({totalElements - this.state.noCF})
+							</Text>
+						</Text>
+					</Box>
+					<Box>
+						<Text color="whiteBright" bold>
+							Sites not using Cloudflare:{" "}
+						</Text>
+						<Text color="whiteBright">
+							{((this.state.noCF / totalElements) * 100).toFixed(
+								2
+							)}
+							% <Text color="gray">({this.state.noCF})</Text>
+						</Text>
+					</Box>
+					<Box>
+						<Text> </Text>
+					</Box>
+					<Box>
 						<Text color="gray">
 							{withCode === 0 ? (
 								<Text color="green" bold>

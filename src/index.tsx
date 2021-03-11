@@ -367,9 +367,11 @@ class App extends React.Component<Props, State> {
 		if (failSorting) this.end(1);
 		await asyncForEach(cnames, async (cname: Cname, index: number) => {
 			this.setStatus(`Checking '${cname.key}'...`);
-			if (!isURL(`${cname.key}.js.org`)) {
+			if (!isURL(`${cname.key}${cname.key === "" ? "" : "."}js.org`)) {
 				this.error(
-					`CNAME would not be a valid URL: '${cname.key}' => '${cname.key}.js.org'`,
+					`CNAME would not be a valid URL: '${cname.key}' => '${
+						cname.key
+					}${cname.key === "" ? "" : "."}js.org'`,
 					false
 				);
 			}

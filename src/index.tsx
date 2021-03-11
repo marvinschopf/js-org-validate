@@ -66,7 +66,7 @@ function error(message: string, exit?: boolean) {
 
 type Props = {};
 
-type Message = { type: "error" | "warning"; message: string };
+type Message = { type: "error" | "warning"; message: string; line?: number };
 
 type State = {
 	status: string;
@@ -85,6 +85,14 @@ type State = {
 type Provider = {
 	provider: string;
 	count: number;
+};
+
+type Annotation = {
+	file: string;
+	line: number;
+	title: string;
+	message: string;
+	annotation_level: "notice" | "warning" | "failure";
 };
 
 class App extends React.Component<Props, State> {
@@ -134,6 +142,26 @@ class App extends React.Component<Props, State> {
 	}
 
 	end(withCode = 0) {
+		if (process.env.CI) {
+			this.setStatus("Creating annotations...");
+			let annotations: Annotation[] = [];
+			this.state.messages.forEach((message: Message) => {
+				annotations.push({
+					file: "cnames_active.js",
+					line: message.line ? message.line : 1,
+					title: message.type,
+					annotation_level:
+						message.type === "error" ? "failure" : "warning",
+					message: message.message,
+				});
+			});
+			fs.writeFileSync(
+				resolve(process.cwd(), "annotations.json"),
+				JSON.stringify(annotations)
+			);
+			this.setStatus("Done.");
+		}
+
 		let providers: ReactNode[] = [];
 		let totalElements: number = 0;
 		this.state.providersMap.forEach((provider: Provider, index: number) => {

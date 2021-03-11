@@ -33,6 +33,8 @@ import { render, Text, Box } from "ink";
 import Spinner from "ink-spinner";
 import prettier from "prettier";
 
+import { identify } from "./providers";
+
 function isValidURL(url: string): boolean {
 	return isURL(url);
 }
@@ -107,6 +109,12 @@ type State = {
 	warningCount: number;
 	summary: ReactNode;
 	done: boolean;
+	providersMap: { provider: string; count: number }[];
+};
+
+type Provider = {
+	provider: string;
+	count: number;
 };
 
 class App extends React.Component<Props, State> {
@@ -121,6 +129,7 @@ class App extends React.Component<Props, State> {
 			errorCount: 0,
 			warningCount: 0,
 			done: false,
+			providersMap: [],
 		};
 	}
 	error(message: string, exitAfter = true) {
@@ -147,38 +156,75 @@ class App extends React.Component<Props, State> {
 	}
 
 	end(withCode = 0) {
-		this.setState({
-			summary: (
-				<Box>
-					<Text color="gray">
-						{withCode === 0 ? (
-							<Text color="green" bold>
-								{this.getEmoji("🎉") + " "}Success!{" "}
-							</Text>
-						) : (
-							<Text color="red" bold>
-								{this.getEmoji("😞") + " "}Failure!{" "}
-							</Text>
-						)}
-						Done with{" "}
-						<Text color="red">
-							{this.state.errorCount} error
-							{this.state.errorCount === 0 ||
-							this.state.errorCount >= 2
-								? "s"
-								: ""}{" "}
-						</Text>
-						and{" "}
-						<Text color="yellow">
-							{this.state.warningCount} warning
-							{this.state.warningCount === 0 ||
-							this.state.warningCount >= 2
-								? "s"
-								: ""}
-						</Text>
-						.
+		let providers: ReactNode[] = [];
+		let totalElements: number = 0;
+		this.state.providersMap.forEach((provider: Provider, index: number) => {
+			totalElements = totalElements + provider.count;
+		});
+		let providersMap: Provider[] = this.state.providersMap;
+		providersMap = this.state.providersMap.sort((a, b): number => {
+			if (a.count < b.count) return -1;
+			if (a.count > b.count) return 1;
+			return 0;
+		});
+		providersMap.forEach((provider) => {
+			providers.push(
+				<Box key={`provider-${provider}`}>
+					<Text color="whiteBright" bold>
+						{provider}:{" "}
+					</Text>
+					<Text color="whiteBright">
+						{(Math.round(
+							(provider.count / totalElements) * 100 +
+								Number.EPSILON
+						) *
+							100) /
+							100}
+						% <Text color="gray">({provider.count})</Text>
 					</Text>
 				</Box>
+			);
+		});
+		this.setState({
+			summary: (
+				<Fragment>
+					<Box>
+						<Text color="magenta" bold>
+							Breakdown of services used:
+						</Text>
+					</Box>
+					{providers}
+					<Box>
+						<Text color="gray">
+							{withCode === 0 ? (
+								<Text color="green" bold>
+									{this.getEmoji("🎉") + " "}Success!{" "}
+								</Text>
+							) : (
+								<Text color="red" bold>
+									{this.getEmoji("😞") + " "}Failure!{" "}
+								</Text>
+							)}
+							Done with{" "}
+							<Text color="red">
+								{this.state.errorCount} error
+								{this.state.errorCount === 0 ||
+								this.state.errorCount >= 2
+									? "s"
+									: ""}{" "}
+							</Text>
+							and{" "}
+							<Text color="yellow">
+								{this.state.warningCount} warning
+								{this.state.warningCount === 0 ||
+								this.state.warningCount >= 2
+									? "s"
+									: ""}
+							</Text>
+							.
+						</Text>
+					</Box>
+				</Fragment>
 			),
 			status: "Done.",
 			done: true,
@@ -249,11 +295,35 @@ class App extends React.Component<Props, State> {
 		);
 		if (failSorting) this.end(1);
 		await asyncForEach(cnames, async (cname: Cname, index: number) => {
-			this.setStatus(`Checking '${cname.key}...'`);
+			this.setStatus(`Checking '${cname.key}'...`);
 			if (!isURL(cname.target)) {
 				this.error(
 					`CNAME target is not a valid url: '${cname.key}' => '${cname.target}'`
 				);
+			}
+			let providerExistent: boolean = false;
+			let providersMap: Provider[] = this.state.providersMap;
+			await asyncForEach(
+				providersMap,
+				(provider: Provider, index: number) => {
+					if (provider.provider === identify(cname.target)) {
+						providerExistent = true;
+						providersMap[index].count =
+							providersMap[index].count + 1;
+						this.setState({
+							providersMap: providersMap,
+						});
+					}
+				}
+			);
+			if (!providerExistent) {
+				providersMap.push({
+					provider: identify(cname.target),
+					count: 0,
+				});
+				this.setState({
+					providersMap: providersMap,
+				});
 			}
 			let cnameTarget: string = cname.target;
 			if (

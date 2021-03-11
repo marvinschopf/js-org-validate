@@ -32,7 +32,6 @@ import React, { Fragment, ReactNode } from "react";
 import { render, Text, Box } from "ink";
 import Spinner from "ink-spinner";
 import prettier from "prettier";
-import deepEqual from "deep-equal";
 
 function isValidURL(url: string): boolean {
 	return isURL(url);

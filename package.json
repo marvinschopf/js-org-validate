@@ -7,7 +7,6 @@
 	"license": "AGPL-3.0-or-later",
 	"private": true,
 	"devDependencies": {
-		"@types/deep-equal": "1.0.1",
 		"@types/node": "14.14.33",
 		"@types/node-fetch": "2.5.8",
 		"@types/prettier": "2.2.2",
@@ -18,7 +17,6 @@
 		"typescript": "4.2.3"
 	},
 	"dependencies": {
-		"deep-equal": "2.0.5",
 		"ink": "3.0.8",
 		"ink-spinner": "4.0.1",
 		"node-fetch": "2.6.1",

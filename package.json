@@ -1,0 +1,39 @@
+{
+	"name": "js-org-validate",
+	"version": "1.0.0",
+	"main": "dist/index.js",
+	"repository": "https://github.com/marvinschopf/js-org-validate",
+	"author": "Marvin Schopf <marvin@schopf.biz>",
+	"license": "MIT",
+	"private": true,
+	"devDependencies": {
+		"@types/deep-equal": "1.0.1",
+		"@types/node": "14.14.33",
+		"@types/node-fetch": "2.5.8",
+		"@types/prettier": "2.2.2",
+		"@types/react": "17.0.3",
+		"@types/rewire": "2.5.28",
+		"@types/validator": "13.1.3",
+		"prettier": "2.2.1",
+		"typescript": "4.2.3"
+	},
+	"dependencies": {
+		"deep-equal": "2.0.5",
+		"ink": "3.0.8",
+		"ink-spinner": "4.0.1",
+		"node-fetch": "2.6.1",
+		"react": "17.0.1",
+		"rewire": "5.0.0",
+		"validator": "13.5.2"
+	},
+	"scripts": {
+		"build": "tsc",
+		"style:fix": "prettier --write **/*.tsx **/*.ts **/*.json"
+	},
+	"prettier": {
+		"useTabs": true,
+		"semi": true,
+		"singleQuote": false,
+		"tabWidth": 4
+	}
+}

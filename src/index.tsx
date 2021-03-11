@@ -35,10 +35,6 @@ import prettier from "prettier";
 
 import { identify } from "./providers";
 
-function isValidURL(url: string): boolean {
-	return isURL(url);
-}
-
 async function asyncForEach(array: any, callback: Function) {
 	for (let index: number = 0; index < array.length; index++) {
 		await callback(array[index], index, array);
@@ -66,36 +62,6 @@ async function getKeyProperties(cnames: Cname[]): Promise<string[]> {
 function error(message: string, exit?: boolean) {
 	console.log(`❌ ${message}`);
 	if (exit) process.exit(1);
-}
-
-async function checkCnameNotInBlacklist(cname: string, blacklist: any) {
-	await asyncForEach(blacklist, async (expression: string) => {
-		if (expression == "(1/2/3/...)") {
-			try {
-				parseInt(cname);
-			} catch (e) {
-				error(`CNAME is blocklisted: '${cname}'`, true);
-			}
-		}
-		if (expression.endsWith("(s)")) {
-			expression = expression.slice(0, -3);
-			if (cname == expression || cname == expression + "s") {
-				error(`CNAME is blocklisted: '${cname}'`, true);
-			}
-		}
-		if (expression.endsWith("(y/ies)")) {
-			expression = expression.slice(0, -7);
-			if (cname == expression + "y" || cname == expression + "ies") {
-				error(`CNAME is blocklisted: '${cname}'`, true);
-			}
-		}
-		if (expression.endsWith("(1/2)")) {
-			expression = expression.slice(0, -5);
-			if (cname == expression + "1" || cname == expression + "2") {
-				error(`CNAME is blocklisted: '${cname}'`, true);
-			}
-		}
-	});
 }
 
 type Props = {};
@@ -181,7 +147,9 @@ class App extends React.Component<Props, State> {
 							{provider.provider}:{" "}
 						</Text>
 						<Text color="whiteBright">
-							{((provider.count / totalElements) * 100).toFixed()}
+							{((provider.count / totalElements) * 100).toFixed(
+								2
+							)}
 							% <Text color="gray">({provider.count})</Text>
 						</Text>
 					</Box>
@@ -530,16 +498,6 @@ class App extends React.Component<Props, State> {
 	render() {
 		return (
 			<React.Fragment>
-				<Box>
-					<Text color="cyan">
-						{!this.state.done && (
-							<Fragment>
-								<Spinner type="dots" />{" "}
-							</Fragment>
-						)}
-						Status: {this.state.status}
-					</Text>
-				</Box>
 				{this.state.warnings.map((warning) => {
 					return (
 						<Box key={`warning-${warning}`}>
@@ -560,6 +518,22 @@ class App extends React.Component<Props, State> {
 						</Box>
 					);
 				})}
+				<Box>
+					<Text> </Text>
+				</Box>
+				<Box>
+					<Text color="cyan" bold>
+						{!this.state.done && (
+							<Fragment>
+								<Spinner type="dots" />{" "}
+							</Fragment>
+						)}
+						Status: {this.state.status}
+					</Text>
+				</Box>
+				<Box>
+					<Text> </Text>
+				</Box>
 				{this.state.success && (
 					<Box>
 						<Text color="green" bold>

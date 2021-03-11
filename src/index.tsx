@@ -153,10 +153,12 @@ class App extends React.Component<Props, State> {
 					<Text color="gray">
 						{withCode === 0 ? (
 							<Text color="green" bold>
-								🎉 Success!{" "}
+								{this.getEmoji("🎉") + " "}Success!{" "}
 							</Text>
 						) : (
-							""
+							<Text color="red" bold>
+								{this.getEmoji("😞") + " "}Failure!{" "}
+							</Text>
 						)}
 						Done with{" "}
 						<Text color="red">

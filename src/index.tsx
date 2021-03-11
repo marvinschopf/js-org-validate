@@ -203,9 +203,7 @@ class App extends React.Component<Props, State> {
 				}
 			);
 		} catch (e) {
-			this.error(
-				"An error occured while parsing 'cnames_active.js'. Is there a syntax error in the file?"
-			);
+			this.error("File 'cnames_active.js' has an invalid syntax.");
 		}
 		this.setStatus("Parsing...");
 		let cnames: Cname[] = [];

@@ -260,6 +260,9 @@ class App extends React.Component<Props, State> {
 									occurred.
 								</Text>
 							</Box>
+							<Box>
+								<Text> </Text>
+							</Box>
 						</Fragment>
 					)}
 					<Box>
@@ -368,12 +371,20 @@ class App extends React.Component<Props, State> {
 		await asyncForEach(cnames, async (cname: Cname, index: number) => {
 			this.setStatus(`Checking '${cname.key}'...`);
 			if (!isURL(`${cname.key}${cname.key === "" ? "" : "."}js.org`)) {
-				this.error(
-					`CNAME would not be a valid URL: '${cname.key}' => '${
-						cname.key
-					}${cname.key === "" ? "" : "."}js.org'`,
-					false
-				);
+				if (
+					!cname.key.startsWith("_") &&
+					!cname.key.endsWith("_") &&
+					cname.key.includes("_")
+				) {
+					// ph
+				} else {
+					this.error(
+						`CNAME would not be a valid URL: '${cname.key}' => '${
+							cname.key
+						}${cname.key === "" ? "" : "."}js.org'`,
+						false
+					);
+				}
 			}
 			if (!isURL(cname.target)) {
 				this.error(

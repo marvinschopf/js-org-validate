@@ -171,7 +171,7 @@ class App extends React.Component<Props, State> {
 			providers.push(
 				<Box key={`provider-${provider.provider}`}>
 					<Text color="whiteBright" bold>
-						{provider}:{" "}
+						{provider.provider}:{" "}
 					</Text>
 					<Text color="whiteBright">
 						{(Math.round(

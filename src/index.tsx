@@ -544,7 +544,7 @@ class App extends React.Component<Props, State> {
 				);
 			}
 		});
-		this.end(0);
+		this.end(this.state.errorCount >= 1 ? 1 : 0);
 	}
 
 	warn(message: string) {

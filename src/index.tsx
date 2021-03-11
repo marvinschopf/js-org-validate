@@ -357,7 +357,8 @@ class App extends React.Component<Props, State> {
 					return (
 						<Box key={`warning-${warning}`}>
 							<Text color="yellow">
-								{this.getEmoji("⚠️") + " "}Warning: {warning}
+								{this.getEmoji("⚠️") + "  "}
+								<Text bold>Warning:</Text> {warning}
 							</Text>
 						</Box>
 					);
@@ -365,8 +366,9 @@ class App extends React.Component<Props, State> {
 				{this.state.errors.map((error) => {
 					return (
 						<Box key={`error-${error}`}>
-							<Text color="red" bold>
-								{this.getEmoji("❌") + " "}Error: {error}
+							<Text color="red">
+								{this.getEmoji("❌") + " "}
+								<Text bold>Error:</Text> {error}
 							</Text>
 						</Box>
 					);

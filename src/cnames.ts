@@ -1,3 +1,11 @@
+/**
+ * This file is based on https://github.com/MattIPv4/js.org-cleanup/blob/master/src/cnames.js
+ * Licensed under AGPL-3.0 License
+ *
+ * @author Matt (IPv4)
+ *
+ */
+
 // Load in fetch for URL testing
 import fs from "fs";
 import { resolve } from "path";

@@ -4,7 +4,7 @@
 	"main": "dist/index.js",
 	"repository": "https://github.com/marvinschopf/js-org-validate",
 	"author": "Marvin Schopf <marvin@schopf.biz>",
-	"license": "MIT",
+	"license": "AGPL-3.0-or-later",
 	"private": true,
 	"devDependencies": {
 		"@types/deep-equal": "1.0.1",

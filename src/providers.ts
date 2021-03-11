@@ -72,6 +72,12 @@ function isGitlab(url: string): boolean {
 	return false;
 }
 
+function isReplit(url: string): boolean {
+	if (url.match(/^(?:https?:\/\/)?(?:[^.]+\.)?repl\.co(\/.*)?$/gi))
+		return true;
+	return false;
+}
+
 export function identify(url: string): string {
 	const _url: string = urlWithoutProtocol(url);
 	if (isVercel(_url)) {
@@ -88,6 +94,9 @@ export function identify(url: string): string {
 	}
 	if (isGitlab(_url)) {
 		return "GitLab";
+	}
+	if (isReplit(_url)) {
+		return "Replit";
 	}
 	return "Other";
 }

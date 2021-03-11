@@ -66,11 +66,14 @@ function error(message: string, exit?: boolean) {
 
 type Props = {};
 
+type Message = { type: "error" | "warning"; message: string };
+
 type State = {
 	status: string;
+	messages: Message[];
 	errors: string[];
-	success: boolean;
 	warnings: string[];
+	success: boolean;
 	errorCount: number;
 	warningCount: number;
 	summary: ReactNode;
@@ -89,23 +92,30 @@ class App extends React.Component<Props, State> {
 		super(props);
 		this.state = {
 			status: "Starting...",
-			errors: [],
+			messages: [],
 			success: false,
-			warnings: [],
 			summary: <Box></Box>,
 			errorCount: 0,
 			warningCount: 0,
 			done: false,
 			providersMap: [],
 			noCF: 0,
+			errors: [],
+			warnings: [],
 		};
 	}
 	error(message: string, exitAfter = true) {
+		let messages: Message[] = this.state.messages;
+		messages.push({
+			type: "error",
+			message: message,
+		});
 		let errors: string[] = this.state.errors;
 		errors.push(message);
 		this.setState({
-			errors: errors,
+			messages: messages,
 			errorCount: this.state.errorCount + 1,
+			errors: errors,
 		});
 		if (exitAfter) this.end(1);
 	}
@@ -499,8 +509,14 @@ class App extends React.Component<Props, State> {
 	warn(message: string) {
 		let warnings: string[] = this.state.warnings;
 		warnings.push(message);
+		let messages: Message[] = this.state.messages;
+		messages.push({
+			type: "warning",
+			message: message,
+		});
 		this.setState({
 			warnings: warnings,
+			messages: messages,
 			warningCount: this.state.warningCount + 1,
 		});
 	}
@@ -511,25 +527,26 @@ class App extends React.Component<Props, State> {
 				<Box>
 					<Text> </Text>
 				</Box>
-				{this.state.warnings.map((warning) => {
-					return (
-						<Box key={`warning-${warning}`}>
-							<Text color="yellow">
-								{this.getEmoji("⚠️") + "  "}
-								<Text bold>Warning:</Text> {warning}
-							</Text>
-						</Box>
-					);
-				})}
-				{this.state.errors.map((error) => {
-					return (
-						<Box key={`error-${error}`}>
-							<Text color="red">
-								{this.getEmoji("❌") + " "}
-								<Text bold>Error:</Text> {error}
-							</Text>
-						</Box>
-					);
+				{this.state.messages.map((message: Message) => {
+					if (message.type === "warning") {
+						return (
+							<Box key={`message-warning-${message.message}`}>
+								<Text color="yellow">
+									{this.getEmoji("⚠️") + "  "}
+									<Text bold>Warning:</Text> {message.message}
+								</Text>
+							</Box>
+						);
+					} else if (message.type === "error") {
+						return (
+							<Box key={`message-error-${message.message}`}>
+								<Text color="red">
+									{this.getEmoji("❌") + " "}
+									<Text bold>Error:</Text> {message.message}
+								</Text>
+							</Box>
+						);
+					}
 				})}
 				<Box>
 					<Text> </Text>

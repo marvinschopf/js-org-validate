@@ -196,7 +196,7 @@ class App extends React.Component<Props, State> {
 					<Box>
 						<Text> </Text>
 					</Box>
-					{this.state.errors.length !== 0 && (
+					{this.state.errors.length === 0 && (
 						<Fragment>
 							<Box>
 								<Text color="magenta" bold>

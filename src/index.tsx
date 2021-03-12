@@ -142,26 +142,6 @@ class App extends React.Component<Props, State> {
 	}
 
 	end(withCode = 0) {
-		if (process.env.CI) {
-			this.setStatus("Creating annotations...");
-			let annotations: Annotation[] = [];
-			this.state.messages.forEach((message: Message) => {
-				annotations.push({
-					file: "cnames_active.js",
-					line: message.line ? message.line : 1,
-					title: message.type,
-					annotation_level:
-						message.type === "error" ? "failure" : "warning",
-					message: message.message,
-				});
-			});
-			fs.writeFileSync(
-				resolve(process.cwd(), "annotations.json"),
-				JSON.stringify(annotations)
-			);
-			this.setStatus("Done.");
-		}
-
 		let providers: ReactNode[] = [];
 		let totalElements: number = 0;
 		this.state.providersMap.forEach((provider: Provider, index: number) => {
@@ -196,6 +176,98 @@ class App extends React.Component<Props, State> {
 				othersCount = provider.count;
 			}
 		});
+		if (process.env.CI) {
+			this.setStatus("Creating annotations...");
+			let annotations: Annotation[] = [];
+			let warningsString: string = "";
+			let errorsString: string = "";
+			this.state.messages.forEach((message: Message) => {
+				annotations.push({
+					file: "cnames_active.js",
+					line: message.line ? message.line : 1,
+					title: message.type,
+					annotation_level:
+						message.type === "error" ? "failure" : "warning",
+					message: message.message,
+				});
+				if (message.type === "error") {
+					errorsString = errorsString + `- ${message.message}\n`;
+				}
+				if (message.type === "warning") {
+					warningsString = warningsString + `- ${message.message}\n`;
+				}
+			});
+			if (warningsString === "")
+				warningsString = "No warnings have occurred.";
+			if (errorsString === "") errorsString = "No errors have occurred.";
+			fs.writeFileSync(
+				resolve(process.cwd(), "annotations.json"),
+				JSON.stringify(annotations)
+			);
+			fs.writeFileSync(
+				resolve(process.cwd(), "pr_comment.md"),
+				`
+# 👋 Hello!
+The validation of your pull request has been completed. ✅
+
+${this.state.errors.length} error${
+					this.state.errors.length === 0 ||
+					this.state.errors.length >= 2
+						? "s"
+						: ""
+				} and ${this.state.warnings.length} warning${
+					this.state.warnings.length === 0 ||
+					this.state.warnings.length >= 2
+						? "s"
+						: ""
+				} occurred.
+
+<details>
+	<summary>${this.state.warnings.length} warning${
+					this.state.warnings.length === 0 ||
+					this.state.warnings.length >= 2
+						? "s"
+						: ""
+				}</summary>
+
+	${warningsString}
+</details>
+<details>
+	<summary>${this.state.errors.length} error${
+					this.state.errors.length === 0 ||
+					this.state.errors.length >= 2
+						? "s"
+						: ""
+				}</summary>
+
+	${errorsString}
+</details>
+<details>
+	<summary>Statistics on (hosting) services</summary>
+
+	${
+		this.state.errors.length >= 1
+			? "As errors occurred, no statistics were calculated."
+			: ""
+	}
+	${
+		this.state.errors.length === 0
+			? "| Provider | Share |\n| ------------- | -----:|\n" +
+			  providersMap
+					.map((provider) => {
+						return `| **${provider.provider}** | **${(
+							(provider.count / totalElements) *
+							100
+						).toFixed(2)}%** (${provider.count}) |`;
+					})
+					.join("")
+			: ""
+	}
+</details>
+`
+			);
+			this.setStatus("Done.");
+		}
 		this.setState({
 			summary: (
 				<Fragment>

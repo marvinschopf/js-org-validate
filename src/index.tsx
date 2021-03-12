@@ -362,6 +362,31 @@ class App extends React.Component<Props, State> {
 		}
 		let failSorting: boolean = false;
 		const sortedItems: string[] = (await getKeyProperties(cnames)).sort();
+		await asyncForEach(cnames, (cname: Cname, index: number) => {
+			this.setStatus(`Validating '${cname.key}'...`);
+			if (!isURL(`${cname.key}${cname.key === "" ? "" : "."}js.org`)) {
+				if (
+					!cname.key.startsWith("_") &&
+					!cname.key.endsWith("_") &&
+					cname.key.includes("_")
+				) {
+					// ph
+				} else {
+					this.error(
+						`CNAME would not be a valid URL: '${cname.key}' => '${
+							cname.key
+						}${cname.key === "" ? "" : "."}js.org'`,
+						false
+					);
+				}
+			}
+			if (!isURL(cname.target)) {
+				this.error(
+					`CNAME target is not a valid url: '${cname.key}' => '${cname.target}'`,
+					false
+				);
+			}
+		});
 		await asyncForEach(
 			sortedItems,
 			async (element: string, index: number) => {
@@ -398,28 +423,6 @@ class App extends React.Component<Props, State> {
 		if (failSorting) this.end(1);
 		await asyncForEach(cnames, async (cname: Cname, index: number) => {
 			this.setStatus(`Checking '${cname.key}'...`);
-			if (!isURL(`${cname.key}${cname.key === "" ? "" : "."}js.org`)) {
-				if (
-					!cname.key.startsWith("_") &&
-					!cname.key.endsWith("_") &&
-					cname.key.includes("_")
-				) {
-					// ph
-				} else {
-					this.error(
-						`CNAME would not be a valid URL: '${cname.key}' => '${
-							cname.key
-						}${cname.key === "" ? "" : "."}js.org'`,
-						false
-					);
-				}
-			}
-			if (!isURL(cname.target)) {
-				this.error(
-					`CNAME target is not a valid url: '${cname.key}' => '${cname.target}'`,
-					false
-				);
-			}
 			let providerExistent: boolean = false;
 			let providersMap: Provider[] = this.state.providersMap;
 			await asyncForEach(

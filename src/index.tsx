@@ -191,10 +191,14 @@ class App extends React.Component<Props, State> {
 					message: message.message,
 				});
 				if (message.type === "error") {
-					errorsString = errorsString + `- ${message.message}\n`;
+					errorsString =
+						errorsString +
+						`- ${message.message.replaceAll("'", "`")}\n`;
 				}
 				if (message.type === "warning") {
-					warningsString = warningsString + `- ${message.message}\n`;
+					warningsString =
+						warningsString +
+						`- ${message.message.replaceAll("'", "`")}\n`;
 				}
 			});
 			if (warningsString === "")
@@ -205,12 +209,16 @@ class App extends React.Component<Props, State> {
 				JSON.stringify(annotations)
 			);
 			fs.writeFileSync(
-				resolve(process.cwd(), "pr_comment.md"),
+				resolve(process.cwd(), "comment.md"),
 				`
 # 👋 Hello!
-The validation of your pull request has been completed. ✅
+The validation of your pull request has been completed. ✅${"  "}
 
-${this.state.errors.length} error${
+**Status:** ${
+					this.state.errors.length === 0
+						? "🎉 **Success!**"
+						: "❌ **Failure!**"
+				} Done with ${this.state.errors.length} error${
 					this.state.errors.length === 0 ||
 					this.state.errors.length >= 2
 						? "s"
@@ -220,7 +228,7 @@ ${this.state.errors.length} error${
 					this.state.warnings.length >= 2
 						? "s"
 						: ""
-				} occurred.
+				}.
 
 <details>
 	<summary>${this.state.warnings.length} warning${
@@ -230,7 +238,7 @@ ${this.state.errors.length} error${
 						: ""
 				}</summary>
 
-	${warningsString}
+${warningsString}
 </details>
 <details>
 	<summary>${this.state.errors.length} error${
@@ -240,10 +248,10 @@ ${this.state.errors.length} error${
 						: ""
 				}</summary>
 
-	${errorsString}
+${errorsString}
 </details>
 <details>
-	<summary>Statistics on (hosting) services</summary>
+	<summary>Statistics</summary>
 
 	${
 		this.state.errors.length >= 1
@@ -252,7 +260,7 @@ ${this.state.errors.length} error${
 	}
 ${
 	this.state.errors.length === 0
-		? "| Provider | Share |\n| ------------- | -----:|\n" +
+		? "### Services  \n\n| Provider | Share |\n| ------------- | -----:|\n" +
 		  providersMap
 				.map((provider) => {
 					return `| **${provider.provider}** | **${(
@@ -261,6 +269,25 @@ ${
 					).toFixed(2)}%** (${provider.count}) |\n`;
 				})
 				.join("")
+		: ""
+}
+<br />
+${
+	this.state.errors.length === 0
+		? `
+### Cloudflare${"  "}
+
+| Status               | Rate |
+|----------------------|------|
+| **Sites using Cloudflare**     | **${(
+				((totalElements - this.state.noCF) / totalElements) *
+				100
+		  ).toFixed(2)}%** (${totalElements - this.state.noCF})  |
+| **Sites not using Cloudflare** | **${(
+				(this.state.noCF / totalElements) *
+				100
+		  ).toFixed(2)}%**  (${this.state.noCF}) |
+`
 		: ""
 }
 </details>

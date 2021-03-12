@@ -258,7 +258,7 @@ ${this.state.errors.length} error${
 						return `| **${provider.provider}** | **${(
 							(provider.count / totalElements) *
 							100
-						).toFixed(2)}%** (${provider.count}) |`;
+						).toFixed(2)}%** (${provider.count}) |\n`;
 					})
 					.join("")
 			: ""

@@ -250,19 +250,19 @@ ${this.state.errors.length} error${
 			? "As errors occurred, no statistics were calculated."
 			: ""
 	}
-	${
-		this.state.errors.length === 0
-			? "| Provider | Share |\n| ------------- | -----:|\n" +
-			  providersMap
-					.map((provider) => {
-						return `| **${provider.provider}** | **${(
-							(provider.count / totalElements) *
-							100
-						).toFixed(2)}%** (${provider.count}) |\n`;
-					})
-					.join("")
-			: ""
-	}
+${
+	this.state.errors.length === 0
+		? "| Provider | Share |\n| ------------- | -----:|\n" +
+		  providersMap
+				.map((provider) => {
+					return `| **${provider.provider}** | **${(
+						(provider.count / totalElements) *
+						100
+					).toFixed(2)}%** (${provider.count}) |\n`;
+				})
+				.join("")
+		: ""
+}
 </details>
 `
 			);

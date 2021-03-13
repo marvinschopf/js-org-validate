@@ -511,7 +511,7 @@ ${
 							: "";
 					this.error(
 						`Wrong sorting: '${element}'. ${recommendation}`,
-						false
+						true
 					);
 					failSorting = true;
 				}

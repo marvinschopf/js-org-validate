@@ -208,46 +208,50 @@ class App extends React.Component<Props, State> {
 				resolve(process.cwd(), "annotations.json"),
 				JSON.stringify(annotations)
 			);
-			fs.writeFileSync(
-				resolve(process.cwd(), "comment.md"),
-				`
+			["pull request", "commit"].map((commentType: string) => {
+				fs.writeFileSync(
+					resolve(
+						process.cwd(),
+						`${commentType.replaceAll(" ", "_")}_comment.md`
+					),
+					`
 **Hello! 👋**${"  "}
-The validation of your pull request has been completed. ✅${"  "}
+The validation of your ${commentType} has been completed. ✅${"  "}
 
 ### Status
 ${
 	this.state.errors.length === 0 ? "🎉 **Success!**" : "❌ **Failure!**"
 } Done with **${this.state.errors.length} error${
-					this.state.errors.length === 0 ||
-					this.state.errors.length >= 2
-						? "s"
-						: ""
-				}** and **${this.state.warnings.length} warning${
-					this.state.warnings.length === 0 ||
-					this.state.warnings.length >= 2
-						? "s"
-						: ""
-				}**.
+						this.state.errors.length === 0 ||
+						this.state.errors.length >= 2
+							? "s"
+							: ""
+					}** and **${this.state.warnings.length} warning${
+						this.state.warnings.length === 0 ||
+						this.state.warnings.length >= 2
+							? "s"
+							: ""
+					}**.
 
 ### Details
 <details>
 		<summary>${this.state.errors.length} error${
-					this.state.errors.length === 0 ||
-					this.state.errors.length >= 2
-						? "s"
-						: ""
-				}</summary>
+						this.state.errors.length === 0 ||
+						this.state.errors.length >= 2
+							? "s"
+							: ""
+					}</summary>
 	<br />
 
 ${errorsString}
 </details>
 <details>
 	<summary>${this.state.warnings.length} warning${
-					this.state.warnings.length === 0 ||
-					this.state.warnings.length >= 2
-						? "s"
-						: ""
-				}</summary>
+						this.state.warnings.length === 0 ||
+						this.state.warnings.length >= 2
+							? "s"
+							: ""
+					}</summary>
 	<br />
 
 ${warningsString}
@@ -293,7 +297,8 @@ ${
 }
 </details>
 `
-			);
+				);
+			});
 			this.setStatus("Done.");
 		}
 		this.setState({

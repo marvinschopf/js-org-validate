@@ -217,17 +217,17 @@ class App extends React.Component<Props, State> {
 					this.state.errors.length === 0
 						? "🎉 **Success!**"
 						: "❌ **Failure!**"
-				} Done with ${this.state.errors.length} error${
+				} Done with **${this.state.errors.length} error${
 					this.state.errors.length === 0 ||
 					this.state.errors.length >= 2
 						? "s"
 						: ""
-				} and ${this.state.warnings.length} warning${
+				}** and **${this.state.warnings.length} warning${
 					this.state.warnings.length === 0 ||
 					this.state.warnings.length >= 2
 						? "s"
 						: ""
-				}.
+				}**.
 
 <details>
 		<summary>${this.state.errors.length} error${

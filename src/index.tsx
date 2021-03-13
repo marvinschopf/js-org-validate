@@ -211,8 +211,7 @@ class App extends React.Component<Props, State> {
 			fs.writeFileSync(
 				resolve(process.cwd(), "comment.md"),
 				`
-# 👋 Hello!
-The validation of your pull request has been completed. ✅${"  "}
+**Hello! 👋** The validation of your pull request has been completed. ✅${"  "}
 
 **Status:** ${
 					this.state.errors.length === 0
@@ -231,6 +230,16 @@ The validation of your pull request has been completed. ✅${"  "}
 				}.
 
 <details>
+		<summary>${this.state.errors.length} error${
+					this.state.errors.length === 0 ||
+					this.state.errors.length >= 2
+						? "s"
+						: ""
+				}</summary>
+
+${errorsString}
+</details>
+<details>
 	<summary>${this.state.warnings.length} warning${
 					this.state.warnings.length === 0 ||
 					this.state.warnings.length >= 2
@@ -241,23 +250,13 @@ The validation of your pull request has been completed. ✅${"  "}
 ${warningsString}
 </details>
 <details>
-	<summary>${this.state.errors.length} error${
-					this.state.errors.length === 0 ||
-					this.state.errors.length >= 2
-						? "s"
-						: ""
-				}</summary>
-
-${errorsString}
-</details>
-<details>
 	<summary>Statistics</summary>
 
-	${
-		this.state.errors.length >= 1
-			? "As errors occurred, no statistics were calculated."
-			: ""
-	}
+${
+	this.state.errors.length >= 1
+		? "As errors occurred, no statistics were calculated."
+		: ""
+}
 ${
 	this.state.errors.length === 0
 		? "### Services  \n\n| Provider | Share |\n| ------------- | -----:|\n" +
@@ -271,7 +270,7 @@ ${
 				.join("")
 		: ""
 }
-<br />
+${this.state.errors.length === 0 ? "<br />" : ""}
 ${
 	this.state.errors.length === 0
 		? `

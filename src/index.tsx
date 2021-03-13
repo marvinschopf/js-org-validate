@@ -248,7 +248,7 @@ ${errorsString}
 						: ""
 				}</summary>
 	<br />
-	
+
 ${warningsString}
 </details>
 <details>
@@ -272,7 +272,6 @@ ${
 				.join("")
 		: ""
 }
-${this.state.errors.length === 0 ? "<br />" : ""}
 ${
 	this.state.errors.length === 0
 		? `

@@ -211,13 +211,14 @@ class App extends React.Component<Props, State> {
 			fs.writeFileSync(
 				resolve(process.cwd(), "comment.md"),
 				`
-**Hello! 👋** The validation of your pull request has been completed. ✅${"  "}
+**Hello! 👋** 
+<br />
+The validation of your pull request has been completed. ✅${"  "}
 
-**Status:** ${
-					this.state.errors.length === 0
-						? "🎉 **Success!**"
-						: "❌ **Failure!**"
-				} Done with **${this.state.errors.length} error${
+### Status
+${
+	this.state.errors.length === 0 ? "🎉 **Success!**" : "❌ **Failure!**"
+} Done with **${this.state.errors.length} error${
 					this.state.errors.length === 0 ||
 					this.state.errors.length >= 2
 						? "s"
@@ -229,6 +230,7 @@ class App extends React.Component<Props, State> {
 						: ""
 				}**.
 
+### Details
 <details>
 		<summary>${this.state.errors.length} error${
 					this.state.errors.length === 0 ||
@@ -261,7 +263,7 @@ ${
 }
 ${
 	this.state.errors.length === 0
-		? "### Services  \n\n| Provider | Share |\n| ------------- | -----:|\n" +
+		? "#### Services  \n\n| Provider | Share |\n| ------------- | -----:|\n" +
 		  providersMap
 				.map((provider) => {
 					return `| **${provider.provider}** | **${(
@@ -275,7 +277,7 @@ ${
 ${
 	this.state.errors.length === 0
 		? `
-### Cloudflare${"  "}
+#### Cloudflare${"  "}
 
 | Status               | Rate |
 |----------------------|------|

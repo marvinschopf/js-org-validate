@@ -1,6 +1,6 @@
 {
 	"name": "js-org-validate",
-	"version": "1.4.1",
+	"version": "1.4.2",
 	"main": "dist/index.js",
 	"repository": "https://github.com/marvinschopf/js-org-validate",
 	"author": {

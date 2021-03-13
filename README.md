@@ -8,14 +8,13 @@ You can either install the package locally as follows, or run it with `npx`.
 
 Using `npm`:
 
-`bash
+```bash
 npm i -g js-org-validate
-
 ```
 
 Using `yarn`:
 
-``bash
+```bash
 yarn global add js-org-validate
 ```
 

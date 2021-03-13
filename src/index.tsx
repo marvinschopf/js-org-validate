@@ -41,16 +41,6 @@ async function asyncForEach(array: any, callback: Function) {
 	}
 }
 
-async function cnamesExist(): Promise<boolean> {
-	try {
-		await fs.promises.access(resolve(process.cwd(), "cnames_active.js"));
-	} catch (e) {
-		error("The file 'cnames_active.js' does not exist.", true);
-		return false;
-	}
-	return true;
-}
-
 async function getKeyProperties(cnames: Cname[]): Promise<string[]> {
 	let keys: string[] = [];
 	await asyncForEach(cnames, (cname: Cname) => {
@@ -437,8 +427,11 @@ ${
 	}
 
 	async componentDidMount() {
-		const cnamesDoExist = await cnamesExist();
-		if (!cnamesDoExist) {
+		try {
+			await fs.promises.access(
+				resolve(process.cwd(), "cnames_active.js")
+			);
+		} catch (e) {
 			this.error("The file 'cnames_active.js' does not exist.", true);
 		}
 		try {

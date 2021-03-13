@@ -439,7 +439,6 @@ ${
 	async componentDidMount() {
 		const cnamesDoExist = await cnamesExist();
 		if (!cnamesDoExist) {
-			this.setState;
 			this.error("The file 'cnames_active.js' does not exist.", true);
 		}
 		try {

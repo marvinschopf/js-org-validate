@@ -211,8 +211,7 @@ class App extends React.Component<Props, State> {
 			fs.writeFileSync(
 				resolve(process.cwd(), "comment.md"),
 				`
-**Hello! 👋** 
-<br />
+**Hello! 👋**${"  "}
 The validation of your pull request has been completed. ✅${"  "}
 
 ### Status

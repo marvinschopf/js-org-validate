@@ -475,14 +475,14 @@ ${
 						`CNAME would not be a valid URL: '${cname.key}' => '${
 							cname.key
 						}${cname.key === "" ? "" : "."}js.org'`,
-						false
+						true
 					);
 				}
 			}
 			if (!isURL(cname.target)) {
 				this.error(
 					`CNAME target is not a valid url: '${cname.key}' => '${cname.target}'`,
-					false
+					true
 				);
 			}
 		});

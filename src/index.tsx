@@ -236,6 +236,7 @@ class App extends React.Component<Props, State> {
 						? "s"
 						: ""
 				}</summary>
+	<br />
 
 ${errorsString}
 </details>
@@ -246,12 +247,13 @@ ${errorsString}
 						? "s"
 						: ""
 				}</summary>
-
+	<br />
+	
 ${warningsString}
 </details>
 <details>
 	<summary>Statistics</summary>
-
+	<br />
 ${
 	this.state.errors.length >= 1
 		? "As errors occurred, no statistics were calculated."
